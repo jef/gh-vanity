@@ -1,5 +1,9 @@
+.idea/
+
 # Binaries for programs and plugins
 *.exe
+*.linux
+*.macos
 *.exe~
 *.dll
 *.so
