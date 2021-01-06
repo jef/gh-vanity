@@ -10,6 +10,6 @@ clean:
 
 .PHONY: dist
 dist:
-	GOOS=windows GOARCH=amd64 go build -o svg.exe
-	GOOS=linux GOARCH=amd64 go build -o svg.linux
-	GOOS=darwin GOARCH=amd64 go build -o svg.darwin
+	GOOS=windows GOARCH=amd64 go build -o stargazer-vanity.exe
+	GOOS=linux GOARCH=amd64 go build -o stargazer-vanity.linux
+	GOOS=darwin GOARCH=amd64 go build -o stargazer-vanity.darwin

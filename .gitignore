@@ -2,8 +2,8 @@
 
 # Binaries for programs and plugins
 *.exe
+*.darwin
 *.linux
-*.macos
 *.exe~
 *.dll
 *.so

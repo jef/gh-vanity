@@ -33,7 +33,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ./svg.exe
+          asset_path: ./stargazer-vanity.exe
           asset_name: svg-windows-amd64.exe
           asset_content_type: application/octet-stream
       - name: Upload Linux asset
@@ -43,7 +43,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ./svg.linux
+          asset_path: ./stargazer-vanity.linux
           asset_name: svg-linux-amd64
           asset_content_type: application/octet-stream
       - name: Upload macOS asset
@@ -53,6 +53,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ./svg.darwin
+          asset_path: ./stargazer-vanity.darwin
           asset_name: svg-darwin-amd64
           asset_content_type: application/octet-stream
