@@ -2,11 +2,11 @@
 
 .PHONY: build
 build:
-	go build -o sgv
+	go build -o stargazer-vanity
 
 .PHONY: clean
 clean:
-	rm -rf sgv
+	rm -rf stargazer-vanity
 
 .PHONY: dist
 dist:

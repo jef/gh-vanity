@@ -1,11 +1,20 @@
 # stargazer-vanity [![cd](https://github.com/jef/stargazer-vanity/workflows/cd/badge.svg)](https://github.com/jef/stargazer-vanity/actions?query=workflow%3Acd+branch%3Amain)
 
-- **star·gaz·er** `/ˈstärˌɡāzər/` Someone that has starred a repository.
-- **van·i·ty** `/ˈvanədē/` Excessive pride in or admiration of one's own appearance or achievements.
+> **star·gaz·er** `/ˈstärˌɡāzər/` Someone that has starred a repository.
+>
+> **van·i·ty** `/ˈvanədē/` Excessive pride in or admiration of one's own appearance or achievements.
 
 I created this out of pure vanity, hence the name. I was curious as to who has starred my repositories (and others) and what companies they worked for.
 
 This allows programs lets a user understand that data without parsing through _many_ pages of stargazers.
+
+## Installation
+
+Download the specific binary from [GitHub Releases](https://github.com/jef/stargazer-vanity/releases) or use `go get`:
+
+```shell
+go get -u github.com/jef/stargazer-vanity
+```
 
 ## Usage
 
@@ -26,10 +35,17 @@ Usage of ./stargazer-vanity:
 
 ### Examples
 
-- Amazon, Google, and GitHub employees for [cli/cli](https://github.com/cli/cli)
-    - `./stargazer-vanity -company=amazon,google -employee -owner=cli -repo=cli`
-- Nvidia employees for [jef/streetmerchant](https://github.com/jef/streetmerchant)
-    - `./stargazer-vanity -company=nvidia -owner=jef -repo=streetmerchant`
+Filter Amazon, Google, and GitHub employees for [cli/cli](https://github.com/cli/cli):
+
+```
+./stargazer-vanity -company=amazon,google -employee -owner=cli -repo=cli
+```
+
+Filter Nvidia employees for [jef/streetmerchant](https://github.com/jef/streetmerchant):
+
+```
+./stargazer-vanity -company=nvidia -owner=jef -repo=streetmerchant
+```
 
 ## Development
 
