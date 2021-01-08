@@ -69,7 +69,7 @@ func getFlags() (*arguments, error) {
 	flag.Visit(func(f *flag.Flag) { seen[f.Name] = true })
 	for _, req := range required {
 		if !seen[req] {
-			return nil, fmt.Errorf("missing required -%s flag\n", req)
+			return nil, fmt.Errorf("missing required -%s flag", req)
 		}
 	}
 
