@@ -1,6 +1,7 @@
 .idea/
 
 # Binaries for programs and plugins
+stargazer-vanity
 *.exe
 *.darwin
 *.linux
