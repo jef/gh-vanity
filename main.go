@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -20,7 +19,7 @@ type userNode struct {
 	IsEmployee    graphql.Boolean
 	Name          graphql.String
 	Login         graphql.String
-	Url           graphql.String
+	URL           graphql.String
 	Organizations struct {
 		Edges []struct {
 			Node struct {
@@ -70,7 +69,7 @@ func getFlags() (*arguments, error) {
 	flag.Visit(func(f *flag.Flag) { seen[f.Name] = true })
 	for _, req := range required {
 		if !seen[req] {
-			return nil, errors.New(fmt.Sprintf("missing required -%s flag\n", req))
+			return nil, fmt.Errorf("missing required -%s flag", req)
 		}
 	}
 
@@ -160,7 +159,7 @@ func getStargazers(a *arguments, ghc *graphql.Client) {
 			}
 
 			organizations := strings.Join(getOrganizations(user), ", ")
-			fmt.Printf("[%s] %s (%s) <%s>: %s (%s)\n", user.Company, user.Name, user.Login, user.Email, user.Url, organizations)
+			fmt.Printf("[%s] %s (%s) <%s>: %s (%s)\n", user.Company, user.Name, user.Login, user.Email, user.URL, organizations)
 		}
 	}
 }
