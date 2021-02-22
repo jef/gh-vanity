@@ -1,4 +1,4 @@
-# stargazer-vanity [![Release](https://img.shields.io/github/workflow/status/jef/stargazer-vanity/Release?color=24292e&label=Release&logo=github&logoColor=white&style=flat-square)](https://github.com/jef/stargazer-vanity/actions/workflows/release.yaml) [![Nightly Release](https://img.shields.io/github/workflow/status/jef/stargazer-vanity/Nightly%20Release?color=24292e&label=Nightly%20Release&logo=github&logoColor=white&style=flat-square)](https://github.com/jef/stargazer-vanity/actions/workflows/nightly-release.yaml)
+# stargazer-vanity [![Release](https://img.shields.io/github/workflow/status/jef/stargazer-vanity/Release?color=24292e&label=Release&logo=github&logoColor=white&style=flat-square)](https://github.com/jef/stargazer-vanity/actions/workflows/release.yaml)
 
 > **star·gaz·er** `/ˈstärˌɡāzər/` Someone that has starred a repository.
 >
