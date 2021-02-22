@@ -4,11 +4,14 @@ on:
     branches:
       - main
 jobs:
-  cd:
+  build-tag-release:
+    name: Build, tag, and release assets
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: google-github-actions/release-please-action@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup release please
+        uses: google-github-actions/release-please-action@v2
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -16,10 +19,12 @@ jobs:
           package-name: stargazer-vanity
       - name: Retrieve latest tag
         run: echo "TAG=$(cat version.txt)" >> $GITHUB_ENV
-      - uses: actions/setup-go@v2
+      - name: Setup Go
+        uses: actions/setup-go@v2
         with:
-          go-version: '1.15'
-      - uses: actions/cache@v2.1.4
+          go-version: '1.16'
+      - name: Setup build cache
+        uses: actions/cache@v2.1.4
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
