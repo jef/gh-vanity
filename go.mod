@@ -1,6 +1,6 @@
 module github.com/jef/stargazer-vanity
 
-go 1.15
+go 1.16
 
 require (
 	github.com/shurcooL/graphql v0.0.0-20200928012149-18c5c3165e3a
