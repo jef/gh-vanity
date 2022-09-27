@@ -1,4 +1,4 @@
-# stargazer-vanity [![Release](https://img.shields.io/github/workflow/status/jef/stargazer-vanity/Release?color=24292e&label=Release&logo=github&logoColor=white&style=flat-square)](https://github.com/jef/stargazer-vanity/actions/workflows/release.yaml)
+# gh-vanity [![Release](https://github.com/jef/gh-vanity/actions/workflows/release.yaml/badge.svg)](https://github.com/jef/gh-vanity/actions/workflows/release.yaml)
 
 > **star·gaz·er** `/ˈstärˌɡāzər/` Someone that has starred a repository.
 >
@@ -10,10 +10,10 @@ This allows programs lets a user understand that data without parsing through _m
 
 ## Installation
 
-Download the specific binary from [GitHub Releases](https://github.com/jef/stargazer-vanity/releases) or use `go get`:
+Download the specific binary from [GitHub Releases](https://github.com/jef/gh-vanity/releases) or use `go get`:
 
 ```shell
-go get -u github.com/jef/stargazer-vanity
+go get -u github.com/jef/gh-vanity
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ go get -u github.com/jef/stargazer-vanity
 It is required that you use a GitHub Personal Access Token (PAT). You can generate one [here](https://github.com/settings/tokens/new). The required scopes are `['read:org', 'user:email', 'read:user']`. Set your PAT to environment variable `GITHUB_PAT`. If `GITHUB_PAT` isn't set, you will be prompted for your PAT in the beginning of startup.
 
 ```
-Usage of ./stargazer-vanity:
+Usage of ./gh-vanity:
   -company string
     	Filter stargazers by company name(s). Can be comma separated.
     	If no names are given, then all stargazers will output.
@@ -38,13 +38,13 @@ Usage of ./stargazer-vanity:
 Filter Amazon, Google, and GitHub employees for [cli/cli](https://github.com/cli/cli):
 
 ```
-./stargazer-vanity -company=amazon,google -employee -owner=cli -repo=cli
+./gh-vanity -company=amazon,google -employee -owner=cli -repo=cli
 ```
 
 Filter Nvidia employees for [jef/streetmerchant](https://github.com/jef/streetmerchant):
 
 ```
-./stargazer-vanity -company=nvidia -owner=jef -repo=streetmerchant
+./gh-vanity -company=nvidia -owner=jef -repo=streetmerchant
 ```
 
 ## Development

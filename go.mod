@@ -1,9 +1,9 @@
-module github.com/jef/stargazer-vanity
+module github.com/jef/gh-vanity
 
 go 1.16
 
 require (
+	github.com/cli/go-gh v0.1.0
 	github.com/shurcooL/graphql v0.0.0-20200928012149-18c5c3165e3a
-	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
-	golang.org/x/oauth2 v0.0.0-20201208152858-08078c50e5b5
+	github.com/spf13/cobra v1.5.0
 )
