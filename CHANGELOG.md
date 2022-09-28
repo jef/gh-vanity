@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/jef/gh-vanity/compare/v1.1.0...v1.1.1) (2022-09-28)
+
+
+### Bug Fixes
+
+* use hardlink ([3f01ac1](https://github.com/jef/gh-vanity/commit/3f01ac175a8f66dd83bbeed5d72306ece5f8ced6))
+
 ## [1.1.0](https://github.com/jef/gh-vanity/compare/v1.0.0...v1.1.0) (2022-09-28)
 
 
