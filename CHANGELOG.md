@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://www.github.com/jef/gh-vanity/compare/v1.0.0...v1.1.0) (2022-09-28)
+
+
+### Features
+
+* **ci:** update asset name ([589b24c](https://www.github.com/jef/gh-vanity/commit/589b24c2467c1ed0cc9b1535416fe448cf08b680))
+
 ## 1.0.0 (2021-01-06)
 
 
