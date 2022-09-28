@@ -1,7 +1,11 @@
 .idea/
+dist/
+
+coverage.out
+report.json
+gh-vanity
 
 # Binaries for programs and plugins
-stargazer-vanity
 *.exe
 *.darwin
 *.linux
@@ -15,6 +19,3 @@ stargazer-vanity
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
-
-# Dependency directories (remove the comment below to include it)
-# vendor/

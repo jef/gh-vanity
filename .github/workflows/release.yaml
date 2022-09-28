@@ -4,60 +4,53 @@ on:
     branches:
       - main
 jobs:
-  build-tag-release:
-    name: Build, tag, and release assets
+  release:
+    name: Create release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup release please
-        uses: google-github-actions/release-please-action@v2
         id: release
+        uses: google-github-actions/release-please-action@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
-          package-name: stargazer-vanity
-      - name: Retrieve latest tag
-        run: echo "TAG=$(cat version.txt)" >> $GITHUB_ENV
+          package-name: gh-vanity
       - name: Setup Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
-          go-version: '1.16'
-      - name: Setup build cache
-        uses: actions/cache@v2.1.4
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: ${{ runner.os }}-go-
+          go-version: '1.19'
       - name: Build release assets
+        if: steps.release.outputs.release_created
         run: make dist
       - name: Upload Windows asset
-        if: ${{ steps.release.outputs.release_created }}
+        if: steps.release.outputs.release_created
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ./stargazer-vanity.exe
-          asset_name: sgv-windows-amd64.exe
+          asset_path: ./dist/gh-vanity-windows-amd64.exe
+          asset_name: gh-vanity-windows-amd64.exe
           asset_content_type: application/octet-stream
       - name: Upload Linux asset
-        if: ${{ steps.release.outputs.release_created }}
+        if: steps.release.outputs.release_created
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ./stargazer-vanity.linux
-          asset_name: sgv-linux-amd64
+          asset_path: ./dist/gh-vanity-linux-amd64
+          asset_name: gh-vanity-linux-amd64
           asset_content_type: application/octet-stream
       - name: Upload macOS asset
-        if: ${{ steps.release.outputs.release_created }}
+        if: steps.release.outputs.release_created
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ./stargazer-vanity.darwin
-          asset_name: sgv-darwin-amd64
+          asset_path: ./dist/gh-vanity-darwin-amd64
+          asset_name: gh-vanity-darwin-amd644
           asset_content_type: application/octet-stream
