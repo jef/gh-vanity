@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: 💡 Have an idea for a new feature?
-    url: https://github.com/jef/stargazer-vanity/discussions
+    url: https://github.com/jef/gh-vanity/discussions
     about: Create a new idea discussion!
-  - name: 🙇 Need help with stargazer-vanity?
-    url: https://github.com/jef/stargazer-vanity/discussions
+  - name: 🙇 Need help with gh-vanity?
+    url: https://github.com/jef/gh-vanity/discussions
     about: Create a new help discussion if it hasn't been asked before!

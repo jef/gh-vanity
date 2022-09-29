@@ -1,24 +1,77 @@
 package main
 
 import (
-	"context"
-	"flag"
+	_ "embed"
 	"fmt"
+	"github.com/shurcooL/graphql"
 	"log"
 	"os"
 	"strings"
 
-	"github.com/shurcooL/graphql"
-	"golang.org/x/crypto/ssh/terminal"
-	"golang.org/x/oauth2"
+	"github.com/cli/go-gh"
+	"github.com/cli/go-gh/pkg/api"
+	"github.com/spf13/cobra"
 )
+
+//go:embed version.txt
+var Version string
+
+func init() {
+	cobra.OnInitialize()
+}
+
+// NewCommand is the root command of gh-vanity.
+func NewCommand() *cobra.Command {
+	var (
+		company  string
+		employee bool
+		owner    string
+		name     string
+	)
+
+	var command = &cobra.Command{
+		Use:               "gh-vanity",
+		Short:             "Show who's starred a repository and what company(s) they worked for.",
+		DisableAutoGenTag: true,
+		Version:           Version,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			client, err := gh.GQLClient(nil)
+			if err != nil {
+				return nil
+			}
+
+			companies := strings.Split(company, ",")
+			err = getStargazers(companies, employee, owner, name, client)
+			if err != nil {
+				return nil
+			}
+
+			return nil
+		},
+	}
+
+	command.Flags().StringVarP(&company, "company", "c", "", "Filter stargazers by company name(s). Can be comma separated. If no names are given, then all stargazers will output.")
+	command.Flags().BoolVarP(&employee, "employee", "e", false, "Filter stargazers that are GitHub employees.")
+	command.Flags().StringVarP(&name, "name", "n", "", "The name of the GitHub repository.")
+	command.Flags().StringVarP(&owner, "owner", "o", "", "The owner or organization of the GitHub repository.")
+
+	err := command.MarkFlagRequired("name")
+	if err != nil {
+		return nil
+	}
+
+	err = command.MarkFlagRequired("owner")
+	if err != nil {
+		return nil
+	}
+
+	return command
+}
 
 type userNode struct {
 	Company       graphql.String
-	Email         graphql.String
 	IsEmployee    graphql.Boolean
 	Name          graphql.String
-	Login         graphql.String
 	URL           graphql.String
 	Organizations struct {
 		Edges []struct {
@@ -29,95 +82,22 @@ type userNode struct {
 	} `graphql:"organizations(first: 10)"`
 }
 
-var query struct {
-	Repository struct {
-		Stargazers struct {
-			TotalCount graphql.Int
-			Edges      []struct {
-				Node userNode
-			}
-			PageInfo struct {
-				EndCursor   graphql.String
-				HasNextPage graphql.Boolean
-			}
-		} `graphql:"stargazers(first: 100, after: $stargazerCursor)"`
-	} `graphql:"repository(owner: $repositoryOwner, name: $repositoryName)"`
-}
-
-type arguments struct {
-	company         string
-	companyFilter   []string
-	employee        bool
-	repositoryOwner string
-	repositoryName  string
-}
-
-func getFlags() (*arguments, error) {
-	a := new(arguments)
-
-	flag.StringVar(&a.company, "company", "",
-		"Filter stargazers by company name(s). Can be comma separated.\n"+
-			"If no names are given, then all stargazers will output.")
-	flag.BoolVar(&a.employee, "employee", false, "Filter stargazers that are GitHub employees.")
-	flag.StringVar(&a.repositoryName, "repo", "", "(Required) The name of the repository.")
-	flag.StringVar(&a.repositoryOwner, "owner", "", "(Required) The owner or organization of the repository.")
-
-	flag.Parse()
-
-	required := []string{"owner", "repo"}
-	seen := make(map[string]bool)
-	flag.Visit(func(f *flag.Flag) { seen[f.Name] = true })
-	for _, req := range required {
-		if !seen[req] {
-			return nil, fmt.Errorf("missing required -%s flag", req)
-		}
-	}
-
-	a.companyFilter = strings.Split(a.company, ",")
-
-	return a, nil
-}
-
-func filterStargazers(a *arguments, u userNode) bool {
+func filterStargazers(companies []string, employee bool, u userNode) bool {
 	company := strings.ReplaceAll(string(u.Company), "@", "")
 	company = strings.TrimSpace(company)
 	company = strings.ToLower(company)
 
-	for _, v := range a.companyFilter {
-		if v == company {
+	for _, v := range companies {
+		if v == company || v == "" {
 			return true
 		}
 	}
 
-	if a.employee {
+	if employee {
 		return bool(u.IsEmployee)
 	}
 
 	return false
-}
-
-func getGitHubClient() (*graphql.Client, error) {
-	pat, found := os.LookupEnv("GITHUB_PAT")
-
-	if !found {
-		fmt.Print("Enter GitHub PAT: ")
-		pw, err := terminal.ReadPassword(0)
-		fmt.Println()
-		if err != nil {
-			return nil, err
-		}
-		pat = string(pw)
-	}
-
-	src := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: pat},
-	)
-
-	httpClient := oauth2.NewClient(context.Background(), src)
-
-	client := graphql.NewClient("https://api.github.com/graphql", httpClient)
-
-	return client, nil
 }
 
 func getOrganizations(user userNode) []string {
@@ -125,55 +105,75 @@ func getOrganizations(user userNode) []string {
 
 	if len(user.Organizations.Edges) > 0 {
 		for _, o := range user.Organizations.Edges {
-			organizations = append(organizations, fmt.Sprintf("%s", o.Node.Name))
+			organizations = append(organizations, string(o.Node.Name))
 		}
 	}
 
 	return organizations
 }
 
-func getStargazers(a *arguments, ghc *graphql.Client) {
-	variables := map[string]interface{}{
-		"repositoryName":  graphql.String(a.repositoryName),
-		"repositoryOwner": graphql.String(a.repositoryOwner),
-		"stargazerCursor": (*graphql.String)(nil),
+func getStargazers(companies []string, employee bool, owner string, name string, client api.GQLClient) error {
+	var query struct {
+		Repository struct {
+			Stargazers struct {
+				TotalCount graphql.Int
+				Edges      []struct {
+					Node userNode
+				}
+				PageInfo struct {
+					EndCursor   graphql.String
+					HasNextPage graphql.Boolean
+				}
+			} `graphql:"stargazers(first: 100, after: $cursor)"`
+		} `graphql:"repository(name: $name, owner: $owner)"`
 	}
 
+	variables := map[string]interface{}{
+		"name":   graphql.String(name),
+		"owner":  graphql.String(owner),
+		"cursor": (*graphql.String)(nil),
+	}
+
+	once := false
 	for {
-		err := ghc.Query(context.Background(), &query, variables)
+		err := client.Query("Stargazers", &query, variables)
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		stargazers := query.Repository.Stargazers
-		if !stargazers.PageInfo.HasNextPage {
-			break
+
+		if !once && stargazers.TotalCount > 1000 {
+			fmt.Println("warning: there are more than 1000 stargazers. this may take a while :)")
+			once = true
 		}
 
-		variables["stargazerCursor"] = stargazers.PageInfo.EndCursor
 		for _, v := range stargazers.Edges {
 			user := v.Node
 
-			if !filterStargazers(a, user) {
+			if !filterStargazers(companies, employee, user) {
 				continue
 			}
 
 			organizations := strings.Join(getOrganizations(user), ", ")
-			fmt.Printf("[%s] %s (%s) <%s>: %s (%s)\n", user.Company, user.Name, user.Login, user.Email, user.URL, organizations)
+
+			fmt.Printf("[%s] %s (%s): %s\n", user.Company, user.Name, user.URL, organizations)
 		}
+
+		if !stargazers.PageInfo.HasNextPage {
+			break
+		}
+
+		variables["cursor"] = stargazers.PageInfo.EndCursor
 	}
+
+	return nil
 }
 
 func main() {
-	a, err := getFlags()
-	if err != nil {
-		log.Fatal(err)
+	command := NewCommand()
+	if err := command.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
-
-	ghc, err := getGitHubClient()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	getStargazers(a, ghc)
 }
