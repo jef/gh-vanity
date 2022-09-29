@@ -17,12 +17,12 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
           package-name: gh-vanity
-#  upload_assets:
-#    name: Upload assets
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v3
-#      - uses: cli/gh-extension-precompile@v1
-#        with:
-#          go_version: "1.19"
+  upload_assets:
+    name: Upload assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - uses: cli/gh-extension-precompile@v1
+        with:
+          go_version: "1.19"
