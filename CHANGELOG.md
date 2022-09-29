@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/jef/gh-vanity/compare/v1.0.0...v1.1.0) (2022-09-29)
+
+
+### Features
+
+* become a gh extension ([f135dbf](https://github.com/jef/gh-vanity/commit/f135dbfcfe3653f020586a294a9c3fe6b3826eb5))
+* **ci:** update asset name ([589b24c](https://github.com/jef/gh-vanity/commit/589b24c2467c1ed0cc9b1535416fe448cf08b680))
+
 ## 1.0.0 (2021-01-06)
 
 
