@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/jef/gh-vanity/compare/v1.1.0...v1.1.1) (2022-09-29)
+
+
+### Bug Fixes
+
+* checkout depth ([c0153c0](https://github.com/jef/gh-vanity/commit/c0153c047ae62e0a276965fba5e89789cf5ecb37))
+
 ## [1.1.0](https://github.com/jef/gh-vanity/compare/v1.0.0...v1.1.0) (2022-09-29)
 
 
