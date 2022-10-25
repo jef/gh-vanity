@@ -5,5 +5,5 @@ go 1.16
 require (
 	github.com/cli/go-gh v0.1.1
 	github.com/shurcooL/graphql v0.0.0-20200928012149-18c5c3165e3a
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.6.1
 )
